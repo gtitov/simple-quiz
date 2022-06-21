@@ -31,6 +31,7 @@ with open("students.json", "r", encoding="UTF-8") as f:
     content = json.load(f)
     students = content["students"]
 
+# create folders if they don't exist
 Path("answers").mkdir(parents=True, exist_ok=True)
 Path("results").mkdir(parents=True, exist_ok=True)
 
@@ -51,7 +52,17 @@ def show_students():
 
 @app.get("/give_quiz")
 def give_quiz(student_id, student: str):
-    questions_for_student = random.sample(quiz_questions, len(quiz_questions))[:1]  # random order and only first n questions
+    """Give json-like quiz
+
+    Args:
+        student_id (int): indentificator of a student
+        student (str): student name
+
+    Returns:
+        obj: json-like quiz
+    """
+    quiz_length = 1
+    questions_for_student = random.sample(quiz_questions, len(quiz_questions))[:quiz_length]  # random order and only first n questions
     return {
         "version": 1,
         "student_id": student_id,
@@ -62,6 +73,14 @@ def give_quiz(student_id, student: str):
 
 @app.get("/get_student_answers")
 def get_answers(student_answers: str):
+    """Save answers as-is and checked answers
+
+    Args:
+        student_answers (str): json-like string with student's answers
+
+    Returns:
+        str: student name
+    """
     json_answers = json.loads(student_answers)
     print(json_answers)
     path_to_answers = f'answers/{json_answers["student"]}_{json_answers["attempt"]}.json'
