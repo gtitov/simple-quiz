@@ -1,9 +1,22 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware  # CORS
 import json
 import random
 from pathlib import Path
 
 app = FastAPI()
+
+origins = [ # CORS
+    "*",
+]
+
+app.add_middleware(  # CORS
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # student_answers_example = {
 #   "version": 1,
@@ -50,9 +63,9 @@ def check_answers(student_answers: dict):
 def show_students():
     return students
 
-@app.get("/give_quiz")
-def give_quiz(student_id, student: str):
-    """Give json-like quiz
+@app.get("/get_quiz")
+def get_quiz(student_id, student: str):
+    """Get json-like quiz
 
     Args:
         student_id (int): indentificator of a student
@@ -71,8 +84,8 @@ def give_quiz(student_id, student: str):
         "questions": questions_for_student
     }
 
-@app.get("/get_student_answers")
-def get_answers(student_answers: str):
+@app.get("/send_student_answers")
+def send_student_answers(student_answers: str):
     """Save answers as-is and checked answers
 
     Args:
