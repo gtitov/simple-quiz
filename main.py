@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware  # CORS
+from fastapi.staticfiles import StaticFiles
 import json
 import random
 from pathlib import Path
@@ -63,6 +64,7 @@ def check_answers(student_answers: dict):
     checked_answers["correct"] = sum([a["is_correct"] for a in checked_answers["questions"]])
     checked_answers["correct_percent"] = round(checked_answers["correct"] * 100 / len(checked_answers["questions"]))
     return checked_answers
+
 
 @app.get("/students")
 def show_students():
@@ -134,4 +136,8 @@ def end_test(password: str):
         return(f"Тестирование завершено. Сводные результаты сохранены в {results_path.resolve()}")
     else:
         return("Неверный пароль")
+
+app.mount("/", StaticFiles(directory="gui", html = True), name="gui")  # must be after method since it uses them
+
+
     
