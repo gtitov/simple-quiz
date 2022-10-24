@@ -138,6 +138,7 @@ def end_test(password: str):
         return("Неверный пароль")
 
 app.mount("/", StaticFiles(directory="gui", html = True), name="gui")  # must be after method since it uses them
+app.mount("/pictures", StaticFiles(directory="pictures"), name="pictures")  # must be after method since it uses them
 
 
     
