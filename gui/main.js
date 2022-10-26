@@ -34,11 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     if (q.options) {
                         let options_div = ""
                         q.options.forEach(o => {
-                            options_div += 
-                            `<div>
-                                <input type="radio" id="${o}" name="${q.id}" value="${o}">
-                                <label for="${o}">${o}</label>
-                            </div>`
+                            options_div += `<label for="${o}"><input type="radio" id="${o}" name="${q.id}" value="${o}">${o}</label>`
                         })
                         const question_div = 
                         `<fieldset>
