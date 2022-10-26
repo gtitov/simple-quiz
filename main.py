@@ -6,7 +6,7 @@ import random
 from pathlib import Path
 from datetime import datetime 
 
-from settings import WAVE, END_TEST_PASSWORD, QUIZ_LENGTH
+from settings import WAVE, END_TEST_PASSWORD, QUIZ_LENGTH, QUESTIONS_FILE, STUDENTS_FILE
 
 app = FastAPI()
 
@@ -22,22 +22,8 @@ app.add_middleware(  # CORS
     allow_headers=["*"],
 )
 
-
-# student_answers_example = {
-#   "version": 1,
-#   "student": "asd",
-#   "wave": 0,
-#   "questions": [
-#     {
-#       "id": 4,
-#       "question": "Сколько винтов у теодолита?",
-#       "student_answer": 100
-#     }
-#   ]
-# }
-
 # open files once and use variables after
-with open("questions.json", "r", encoding="UTF-8") as f:
+with open(QUESTIONS_FILE, "r", encoding="UTF-8") as f:
     content = json.load(f)
     all_questions = content["questions"]
     topics_questions = all_questions  # don't use topics for now. see next to lines to use topics
@@ -46,7 +32,7 @@ with open("questions.json", "r", encoding="UTF-8") as f:
     remove_keys = ["author", "answer", "topic"]
     quiz_questions = [{key: value for key, value in q.items() if key not in remove_keys} for q in topics_questions]
 
-with open("students.json", "r", encoding="UTF-8") as f:
+with open(STUDENTS_FILE, "r", encoding="UTF-8") as f:
     content = json.load(f)
     students = content["students"]
 
