@@ -1,3 +1,4 @@
+// REPLACE localhost WITH ACTUAL HOST IP
 document.addEventListener("DOMContentLoaded", function () {
     // console.log("ok")
     var students_selector = document.getElementById("students-selector")
