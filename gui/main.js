@@ -27,11 +27,12 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(r => r.json())
             .then(quiz => {
                 // console.log(quiz)
+                // console.log(quiz.questions)
                 var questions = quiz.questions
 
                 var questions_html = "<form id='form' onkeydown='return event.keyCode != 13;'>"
                 questions.forEach(q => {
-                    console.log(q)
+                    // console.log(q)
                     if (q.options) {
                         let options_div = ""
                         q.options.forEach(o => {
@@ -68,16 +69,21 @@ document.addEventListener("DOMContentLoaded", function () {
                 button.onclick = function () {
                     const form = document.getElementById('form');
                     const formData = new FormData(form);
-                    console.log(formData)
                     for (const [key, value] of formData) {
-                        console.log(quiz)
-                        console.log(`${key}: ${value}\n`)  // assume questions are in the same order - can it make code simplier?
+                        // console.log(quiz)
+                        // console.log(`${key}: ${value}\n`)  // assume questions are in the same order - can it make code simplier?
                         quiz.questions.find(q => q.id == key).student_answer = value
                         // console.log(quiz)
                     }
-                    fetch('http://localhost:8000/save_student_answers?' + new URLSearchParams({
-                        student_answers: JSON.stringify(quiz)
-                    }))
+                    fetch('http://localhost:8000/save_student_answers', {
+                        method: 'POST',
+                        // mode: 'no-cors',
+                        // headers: {
+                        //     'Accept': 'text/plain',
+                        //     'Content-Type': 'text/plain'
+                        // },
+                        body: JSON.stringify(quiz)
+                    })
                     document.getElementById("main").innerHTML = "<p>Тестирование окончено</p>"
                 };
                 // where do we want to have the button to appear?

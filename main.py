@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Body
 from fastapi.middleware.cors import CORSMiddleware  # CORS
 from fastapi.staticfiles import StaticFiles
 import json
@@ -78,8 +78,8 @@ def get_quiz(student_id, student: str):
         "questions": questions_for_student
     }
 
-@app.get("/save_student_answers")
-def send_student_answers(student_answers: str):
+@app.post("/save_student_answers")
+def send_student_answers(student_answers: str = Body()):
     """Save answers as-is and check answers
 
     Args:
