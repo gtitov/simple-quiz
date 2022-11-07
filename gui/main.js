@@ -65,7 +65,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 document.getElementById("main").innerHTML = questions_html
 
                 var button = document.createElement('button');
-                button.innerHTML = 'Сдать';
+                button.style.margin = "20px"
+                button.innerHTML = 'Сдать тест';
                 button.onclick = function () {
                     // TODO: move this logic to the backend check_answers function
                     // Populate quiz with empty answers (if no answer presented in select there'll be no property "answer" what could not be resolved in API)
