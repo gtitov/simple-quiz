@@ -46,7 +46,7 @@ def check_answers(student_answers: dict):
     for a in checked_answers["questions"]:
         question_id = a["id"]
         a["correct_answer"] = next(question["answer"] for question in all_questions if question["id"] == question_id)  # all_questions can be replaced with topic_questions
-        a["is_correct"] = a["student_answer"] == a["correct_answer"]
+        a["is_correct"] = a["student_answer"].casefold() == a["correct_answer"].casefold()  # make sure answer is str
 
     checked_answers["correct"] = sum([a["is_correct"] for a in checked_answers["questions"]])
     checked_answers["correct_percent"] = round(checked_answers["correct"] * 100 / len(checked_answers["questions"]))
