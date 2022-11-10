@@ -26,11 +26,11 @@ app.add_middleware(  # CORS
 with open(QUESTIONS_FILE, "r", encoding="UTF-8") as f:
     content = json.load(f)
     all_questions = content["questions"]
-    topics_questions = all_questions  # don't use topics for now. see next to lines to use topics
+    # if you want to use topics 1) filter all questions with topics 2) use topic questions to construct quiz_questions (when removing service keys from all_questions dict)
     # topics = ["теодолит"]  # move topics to VARIABLES
     # topics_questions = [q for q in all_questions if q.get("topic") in topics]
     remove_keys = ["author", "answer", "topic"]
-    quiz_questions = [{key: value for key, value in q.items() if key not in remove_keys} for q in topics_questions]
+    quiz_questions = [{key: value for key, value in q.items() if key not in remove_keys} for q in all_questions]  # all_questions can be replaced with topic_questions
 
 with open(STUDENTS_FILE, "r", encoding="UTF-8") as f:
     content = json.load(f)
@@ -44,7 +44,7 @@ def check_answers(student_answers: dict):
     checked_answers = student_answers
     for a in checked_answers["questions"]:
         question_id = a["id"]
-        a["correct_answer"] = next(question["answer"] for question in topics_questions if question["id"] == question_id)
+        a["correct_answer"] = next(question["answer"] for question in all_questions if question["id"] == question_id)  # all_questions can be replaced with topic_questions
         a["is_correct"] = a["student_answer"] == a["correct_answer"]
 
     checked_answers["correct"] = sum([a["is_correct"] for a in checked_answers["questions"]])
