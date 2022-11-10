@@ -25,6 +25,7 @@ app.add_middleware(  # CORS
 # open files once and use variables after
 with open(QUESTIONS_FILE, "r", encoding="UTF-8") as f:
     content = json.load(f)
+    # TODO reassign questions id since mistakes are possible and checking is based on id
     all_questions = content["questions"]
     # if you want to use topics 1) filter all questions with topics 2) use topic questions to construct quiz_questions (when removing service keys from all_questions dict)
     # topics = ["теодолит"]  # move topics to VARIABLES
