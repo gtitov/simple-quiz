@@ -30,8 +30,10 @@ with open(QUESTIONS_FILE, "r", encoding="UTF-8") as f:
     # if you want to use topics 1) filter all questions with topics 2) use topic questions to construct quiz_questions (when removing service keys from all_questions dict)
     # topics = ["теодолит"]  # move topics to VARIABLES
     # topics_questions = [q for q in all_questions if q.get("topic") in topics]
+    typed_questions = [dict(q, **{"is_multiple": True}) if type(q["answer"]) is list else dict(q, **{"is_multiple": False}) for q in all_questions]
+    print(typed_questions)
     remove_keys = ["author", "answer", "topic"]
-    quiz_questions = [{key: value for key, value in q.items() if key not in remove_keys} for q in all_questions]  # all_questions can be replaced with topic_questions
+    quiz_questions = [{key: value for key, value in q.items() if key not in remove_keys} for q in typed_questions]  # all_questions can be replaced with topic_questions
 
 with open(STUDENTS_FILE, "r", encoding="UTF-8") as f:
     content = json.load(f)
@@ -46,7 +48,13 @@ def check_answers(student_answers: dict):
     for a in checked_answers["questions"]:
         question_id = a["id"]
         a["correct_answer"] = next(question["answer"] for question in all_questions if question["id"] == question_id)  # all_questions can be replaced with topic_questions
-        a["is_correct"] = a["student_answer"].casefold() == a["correct_answer"].casefold()  # make sure answer is str
+        if type(a["student_answer"]) is str and type(a["correct_answer"]) is str:
+            a["is_correct"] = a["student_answer"].casefold() == a["correct_answer"].casefold()
+        elif type(a["student_answer"]) is list and type(a["correct_answer"]) is list:
+            a["is_correct"] = set(a["student_answer"]) == set(a["correct_answer"])
+        else:
+            print("Unmatched types! Can't compare.")
+            a["is_correct"] = False
 
     checked_answers["correct"] = sum([a["is_correct"] for a in checked_answers["questions"]])
     checked_answers["correct_percent"] = round(checked_answers["correct"] * 100 / len(checked_answers["questions"]))

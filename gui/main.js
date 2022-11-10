@@ -33,7 +33,23 @@ document.addEventListener("DOMContentLoaded", function () {
                 var questions_html = "<form id='form' onkeydown='return event.keyCode != 13;'>"
                 questions.forEach(q => {
                     // console.log(q)
-                    if (q.options) {
+                    if (q.is_multiple) {
+                        let options_div = ""
+                        q.options.forEach(o => {
+                            options_div += `<label for="${o}${q.id}"><input type="checkbox" id="${o}${q.id}" name="${q.id}" value="${o}">${o}</label>`
+                        })
+                        const question_div = 
+                        `<fieldset>
+                            <legend>Выберите ответ:</legend>
+                            ${options_div}
+                        </fieldset>`
+                        questions_html += 
+                        `<article>
+                            <h3>${q.question}</h3>
+                            ${q.picture ? `<img src='${q.picture}'>` : ""}
+                            ${question_div}
+                        </article>`
+                    } else if (q.options) {
                         let options_div = ""
                         q.options.forEach(o => {
                             options_div += `<label for="${o}${q.id}"><input type="radio" id="${o}${q.id}" name="${q.id}" value="${o}">${o}</label>`
@@ -71,7 +87,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     // TODO: move this logic to the backend check_answers function
                     // Populate quiz with empty answers (if no answer presented in select there'll be no property "answer" what could not be resolved in API)
                     for (const question of quiz.questions) {
-                        question.student_answer = ""
+                        question.is_multiple ? question.student_answer = [] : question.student_answer = ""
                     }
 
                     // Replace the empty answers with real answers
@@ -79,10 +95,12 @@ document.addEventListener("DOMContentLoaded", function () {
                     const formData = new FormData(form);
                     for (const [key, value] of formData) {
                         // console.log(quiz)
-                        // console.log(`${key}: ${value}\n`)  // assume questions are in the same order - can it make code simplier?
-                        quiz.questions.find(q => q.id == key).student_answer = value
-                        // console.log(quiz)
+                        console.log(`${key}: ${value}\n`)  // assume questions are in the same order - can it make code simplier?
+                        const question = quiz.questions.find(q => q.id == key)
+                        question.is_multiple ? question.student_answer.push(value) : question.student_answer = value
+                        // quiz.questions.find(q => q.id == key).student_answer = value
                     }
+                    console.log(quiz)
                     fetch('http://localhost:8000/save_student_answers', {
                         method: 'POST',
                         // mode: 'no-cors',
