@@ -120,7 +120,7 @@ def end_test(password: str):
         csv_string = "student,percent,start,end\n"
         for file_in_results in Path("results").iterdir():
             if file_in_results.is_file() and file_in_results.suffix == ".json":
-                print(file_in_results)
+                # print(file_in_results)
                 with open(file_in_results, "r", encoding="UTF-8") as f:
                     content = json.load(f)
                     csv_string += f"{content['student']},{content['correct_percent']},{content['start_time']},{content['end_time']}\n"
