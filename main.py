@@ -31,7 +31,7 @@ with open(QUESTIONS_FILE, "r", encoding="UTF-8") as f:
     # topics = ["теодолит"]  # move topics to VARIABLES
     # topics_questions = [q for q in all_questions if q.get("topic") in topics]
     typed_questions = [dict(q, **{"is_multiple": True}) if type(q["answer"]) is list else dict(q, **{"is_multiple": False}) for q in all_questions]
-    print(typed_questions)
+    # print(typed_questions)
     remove_keys = ["author", "answer", "topic"]
     quiz_questions = [{key: value for key, value in q.items() if key not in remove_keys} for q in typed_questions]  # all_questions can be replaced with topic_questions
 
