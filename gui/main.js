@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var students_selector = document.getElementById("students-selector")
     var get_quiz_button = document.getElementById("get-quiz")
 
-    fetch("http://localhost:8000/students")
+    fetch("/students")
         .then(r => r.json())
         .then(students => {
             students.forEach(student => {
@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
     get_quiz_button.addEventListener("click", function () {
         // console.log(students_selector.value)
         // console.log(students_selector.options[students_selector.selectedIndex].text)
-        fetch('http://localhost:8000/get_quiz?' + new URLSearchParams({
+        fetch('/get_quiz?' + new URLSearchParams({
             student_id: students_selector.value,
             student: students_selector.options[students_selector.selectedIndex].text
         }))
@@ -101,7 +101,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         // quiz.questions.find(q => q.id == key).student_answer = value
                     }
                     console.log(quiz)
-                    fetch('http://localhost:8000/save_student_answers', {
+                    fetch('/save_student_answers', {
                         method: 'POST',
                         // mode: 'no-cors',
                         // headers: {
@@ -122,7 +122,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("end-quiz").addEventListener("click", function() {
         let pass = window.prompt("Уважаемый преподаватель, введите пароль, чтобы завершить тестирование для всех", "Я здесь случайно")
         // console.log(pass)
-        fetch('http://localhost:8000/end_quiz?' + new URLSearchParams({
+        fetch('/end_quiz?' + new URLSearchParams({
             password: pass
         }))
             .then(r => r.text())
