@@ -9,7 +9,7 @@ import socket
 
 from settings import WAVE, END_TEST_PASSWORD, QUIZ_LENGTH, QUESTIONS_FILE, STUDENTS_FILE
 
-app = FastAPI()
+app = FastAPI(debug=True)
 
 origins = [ # CORS
     "*",
@@ -25,9 +25,9 @@ app.add_middleware(  # CORS
 
 # open files once and use variables after
 with open(QUESTIONS_FILE, "r", encoding="UTF-8") as f:
-    content = json.load(f)
+    questions_json = json.load(f)
     # TODO reassign questions id since mistakes are possible and checking is based on id
-    all_questions = content["questions"]
+    all_questions = questions_json["questions"]
     # if you want to use topics 1) filter all questions with topics 2) use topic questions to construct quiz_questions (when removing service keys from all_questions dict)
     # topics = ["теодолит"]  # move topics to VARIABLES
     # topics_questions = [q for q in all_questions if q.get("topic") in topics]
@@ -37,8 +37,8 @@ with open(QUESTIONS_FILE, "r", encoding="UTF-8") as f:
     quiz_questions = [{key: value for key, value in q.items() if key not in remove_keys} for q in typed_questions]  # all_questions can be replaced with topic_questions
 
 with open(STUDENTS_FILE, "r", encoding="UTF-8") as f:
-    content = json.load(f)
-    students = content["students"]
+    students_json = json.load(f)
+    students = students_json["students"]
 
 # create folders if they don't exist
 Path("answers").mkdir(parents=True, exist_ok=True)
@@ -60,6 +60,22 @@ def check_answers(student_answers: dict):
     checked_answers["correct"] = sum([a["is_correct"] for a in checked_answers["questions"]])
     checked_answers["correct_percent"] = round(checked_answers["correct"] * 100 / len(checked_answers["questions"]))
     return checked_answers
+
+
+@app.get("/check_questions")
+def check_questions():
+    unique_ids = []
+    errors = []
+    for q in all_questions:
+        if q["id"] in unique_ids:
+            errors.append(f'"id": {q["id"]} — идентификатор не уникален')
+        else:
+            unique_ids.append(q["id"])
+        
+        if q.get("options") and not (set(q["answer"]).issubset(set(q["options"])) or q["answer"] in q["options"]):
+            errors.append(f"В вопросе '{q['question']}' нет корректного варианта ответа")
+    return errors if errors else "Вопросы в порядке!"
+
 
 
 @app.get("/hostip")

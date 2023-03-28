@@ -1,0 +1,23 @@
+{
+    "type": "object",
+    "properties": {
+        "version": {"type": "number"},
+        "questions": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "id": {"type": "number"},
+                    "topic": {"type": "string"},
+                    "author": {"type": "string"},
+                    "question": {"type": "string"},
+                    "picture": {"type": "string"},
+                    "options": {"type": "array"},
+                    "answer": {}
+                },
+                "required": ["id", "question", "answer"]
+            }
+        }
+    },
+    "required": ["questions"]
+}
