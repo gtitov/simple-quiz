@@ -4,6 +4,10 @@ document.addEventListener("DOMContentLoaded", function () {
     var students_selector = document.getElementById("students-selector")
     var get_quiz_button = document.getElementById("get-quiz")
 
+    fetch("/hostip")
+        .then(r => r.json())
+        .then(host_ip => document.getElementById("host-ip").innerText += ` ${host_ip}:8000`)
+
     fetch("/students")
         .then(r => r.json())
         .then(students => {

@@ -4,7 +4,8 @@ from fastapi.staticfiles import StaticFiles
 import json
 import random
 from pathlib import Path
-from datetime import datetime 
+from datetime import datetime
+import socket
 
 from settings import WAVE, END_TEST_PASSWORD, QUIZ_LENGTH, QUESTIONS_FILE, STUDENTS_FILE
 
@@ -60,6 +61,20 @@ def check_answers(student_answers: dict):
     checked_answers["correct_percent"] = round(checked_answers["correct"] * 100 / len(checked_answers["questions"]))
     return checked_answers
 
+
+@app.get("/hostip")
+def show_host_ip():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.settimeout(0)
+    try:
+        # doesn't even have to be reachable
+        s.connect(('10.254.254.254', 1))
+        ip = s.getsockname()[0]
+    except Exception:
+        ip = '127.0.0.1'
+    finally:
+        s.close()
+    return ip
 
 @app.get("/students")
 def show_students():
