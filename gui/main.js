@@ -132,4 +132,10 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(r => r.text())
             .then(text => window.alert(text))
     })
+
+    document.getElementById("check-questions").addEventListener("click", function() {
+        fetch('/check_questions')
+            .then(r => r.text())
+            .then(text => window.alert(text))
+    })
 })
