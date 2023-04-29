@@ -64,6 +64,11 @@ def check_answers(student_answers: dict):
 
 @app.get("/check_questions")
 def check_questions():
+    """Проверка вопросов на 1) наличие уникального идентификатора вопроса, 2) наличие правильного варианта ответа для вопросов с вариантами ответа
+
+    Returns:
+        Сообщение о корректности / некорректности вопросов
+    """
     unique_ids = []
     errors = []
     for q in all_questions:
@@ -80,6 +85,11 @@ def check_questions():
 
 @app.get("/hostip")
 def show_host_ip():
+    """Возвращает IP-адрес компьютера, на котором запущен сервер тестирования, — к этому IP-адресу нужно подключаться с компьютеров пользователей
+
+    Returns:
+        IP-адрес
+    """
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.settimeout(0)
     try:
@@ -94,18 +104,23 @@ def show_host_ip():
 
 @app.get("/students")
 def show_students():
+    """Список студентов
+
+    Returns:
+        JSON со списком студентов
+    """
     return students
 
 @app.get("/get_quiz")
 def get_quiz(student_id, student: str):
-    """Get json-like quiz
+    """Получить JSON с тестом
 
     Args:
-        student_id (int): indentificator of a student
-        student (str): student name
+        student_id (int): идентификатор студента
+        student (str): имя студента
 
     Returns:
-        obj: json-like quiz
+        obj: JSON с тестом
     """
     quiz_length = QUIZ_LENGTH
     questions_for_student = random.sample(quiz_questions, len(quiz_questions))[:quiz_length]  # random order and only first n questions
@@ -120,13 +135,13 @@ def get_quiz(student_id, student: str):
 
 @app.post("/save_student_answers")
 def send_student_answers(student_answers: str = Body()):
-    """Save answers as-is and check answers
+    """Сохранить ответы студента как есть (./answers/...) и сохранить проверенные ответы студента (./results/...)
 
     Args:
-        student_answers (str): json-like string with student's answers
+        student_answers (str): JSON с ответами студента
 
     Returns:
-        str: student name
+        str: имя студента
     """
     json_answers = json.loads(student_answers)
     timestamp_str = datetime.now().strftime("%Y-%m-%dT%H-%M-%S")
@@ -142,10 +157,10 @@ def send_student_answers(student_answers: str = Body()):
 
 @app.get("/end_quiz")
 def end_test(password: str):
-    """End test and save results to csv
+    """Сохранить результаты из файлов JSON в папке ./results в файл CSV
 
     Args:
-        password (str): password to end test
+        password (str): пароль для "окончания теста"
     """
     if password == END_TEST_PASSWORD:
         csv_string = "student,percent,start,end\n"
