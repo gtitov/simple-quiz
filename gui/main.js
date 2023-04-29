@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             ${question_div}
                         </article>`
                     } else {
-                        const question_div = `<input type="text" id="${q.id}" name="${q.id}">`
+                        const question_div = `<input type="text" autocomplete="off" id="${q.id}" name="${q.id}">`
                         questions_html += 
                         `<article>
                             <h3>${q.question}</h3>
