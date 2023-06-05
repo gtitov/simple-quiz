@@ -27,7 +27,7 @@ app.add_middleware(  # CORS
 with open(QUESTIONS_FILE, "r", encoding="UTF-8") as f:
     questions_json = json.load(f)
     # TODO reassign questions id since mistakes are possible and checking is based on id
-    all_questions = questions_json["questions"]
+    all_questions = [{**q, "id": i} for i, q in enumerate(questions_json["questions"])]
     # if you want to use topics 1) filter all questions with topics 2) use topic questions to construct quiz_questions (when removing service keys from all_questions dict)
     # topics = ["теодолит"]  # move topics to VARIABLES
     # topics_questions = [q for q in all_questions if q.get("topic") in topics]
