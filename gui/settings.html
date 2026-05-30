@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Настройки теста</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+</head>
+<body>
+    <script>
+        let password = prompt("Введите пароль для доступа к настройкам:");
+        if (!password) {
+            alert("Пароль не введён. Доступ запрещён.");
+            document.body.innerHTML = "<h2>Доступ запрещён.</h2>";
+            throw new Error("Пароль не введён");
+        }
+    </script>
+
+    <h1>Настройки теста</h1>
+    <form id="settings-form">
+        <label for="quiz-length">Количество вопросов:</label>
+        <input type="number" id="quiz-length" name="quiz_length" min="1" max="200">
+
+        <label for="test-time">Время теста (мин):</label>
+        <input type="number" id="test-time" name="test_time" min="1" max="300">
+
+        <label>Выберите темы:</label>
+        <div id="topics-container"></div>
+
+        <button type="submit">Сохранить настройки</button>
+    </form>
+
+    <hr>
+
+    <h2>Обновить список студентов</h2>
+    <p>Можно загрузить файл <code>.json</code> или <code>.csv</code>.</p>
+    <p>Поддерживаются форматы CSV:</p>
+    <ul>
+        <li>один столбец с ФИО;</li>
+        <li>столбец <code>name</code>;</li>
+        <li>столбцы <code>id</code> и <code>name</code>.</li>
+    </ul>
+    <p>Если готовите файл в Excel: сохраните его как <b>CSV UTF-8</b>.</p>
+
+    <form id="upload-form">
+        <input type="file" id="students-file" accept=".json,.csv" required>
+        <button type="submit">Загрузить файл</button>
+    </form>
+
+    <p><a href="index.html">Назад к тестированию</a></p>
+
+    <script>
+        let savedConfig = {};
+
+        fetch("/get_config?password=" + encodeURIComponent(password))
+            .then(r => r.json())
+            .then(cfg => {
+                if (cfg.error) {
+                    alert("Неверный пароль");
+                    document.body.innerHTML = "<h2>Доступ запрещён.</h2>";
+                    throw new Error("Неверный пароль");
+                }
+                savedConfig = cfg;
+                document.getElementById("quiz-length").value = cfg.quiz_length;
+                document.getElementById("test-time").value = cfg.test_time || 15;
+
+                return fetch("/get_topics?password=" + encodeURIComponent(password));
+            })
+            .then(r => r.json())
+            .then(topics => {
+                const container = document.getElementById("topics-container");
+                topics.forEach(topic => {
+                    const id = `topic-${Math.random().toString(36).substr(2, 9)}`;
+                    const label = document.createElement("label");
+                    const checkbox = document.createElement("input");
+                    checkbox.type = "checkbox";
+                    checkbox.name = "topics";
+                    checkbox.value = topic;
+                    checkbox.id = id;
+
+                    if (!savedConfig.topics || savedConfig.topics.includes(topic)) {
+                        checkbox.checked = true;
+                    }
+
+                    label.htmlFor = id;
+                    label.textContent = topic || "(без темы)";
+                    const line = document.createElement("div");
+                    line.appendChild(checkbox);
+                    line.appendChild(label);
+                    container.appendChild(line);
+                });
+            });
+
+        document.getElementById("settings-form").addEventListener("submit", function(e) {
+            e.preventDefault();
+            const quiz_length = document.getElementById("quiz-length").value;
+            const checked = Array.from(document.querySelectorAll("input[name='topics']:checked"));
+            const topics = checked.map(c => c.value);
+            const test_time = document.getElementById("test-time").value;
+
+            fetch("/set_config?password=" + encodeURIComponent(password), {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ quiz_length, topics, test_time })
+            })
+            .then(r => r.text())
+            .then(alert);
+        });
+
+        document.getElementById("upload-form").addEventListener("submit", function(e) {
+            e.preventDefault();
+            const fileInput = document.getElementById("students-file");
+
+            if (!fileInput.files.length) {
+                alert("Выберите файл.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("file", fileInput.files[0]);
+
+            fetch("/upload_students?password=" + encodeURIComponent(password), {
+                method: "POST",
+                body: formData
+            })
+            .then(r => r.text())
+            .then(alert);
+        });
+    </script>
+</body>
+</html>

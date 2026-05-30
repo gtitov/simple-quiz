@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 document.getElementById("header").innerHTML = `<h1>Тестирование</h1><p>${students_selector.options[students_selector.selectedIndex].text}</p>`
                 document.getElementById("main").innerHTML = questions_html
 
-                var testTime = quiz.test_time || 15;
+                var testTime = 2;
                 var startTime = new Date();
                 var endTime = startTime.getTime() + testTime * 60 * 1000;
                 var time = document.createElement("div");
@@ -93,12 +93,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 function showTime() {
                     timeLeft = new Date();
                     timeLeft = endTime - timeLeft.getTime();
-                    time.innerHTML = Math.floor(timeLeft / 1000 / 60) + ":";
-					if (Math.floor(timeLeft / 1000) % 60 < 10) { time.innerHTML += "0" }
-					time.innerHTML += (Math.floor(timeLeft / 1000) % 60);
-                    if (time.innerHTML == "0:00") {
+                    time.innerHTML = Math.floor(timeLeft / 1000 / 60) + ":" + (Math.floor(timeLeft / 1000) % 60);
+                    if (time.innerHTML == "0:0") {
 					    endTest();
-					    // clearInterval(testTiming);
+					    clearInterval(testTiming);
 				    }
                 }
                 var testTiming = setInterval(showTime, 200);
@@ -133,8 +131,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         // },
                         body: JSON.stringify(quiz)
                     })
-					clearInterval(testTiming);
-                    document.getElementById("main").innerHTML = "<p>Тестирование окончено</p>";
+                    document.getElementById("main").innerHTML = "<p>Тестирование окончено</p>"
                 }
                 button.onclick = endTest;
                 // where do we want to have the button to appear?

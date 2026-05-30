@@ -7,11 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <!-- <link rel="stylesheet" href="https://unpkg.com/awsm.css/dist/awsm.min.css"> -->
-    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/spcss@0.9.0"> -->
-    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css"> -->
+    <!--  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/spcss@0.9.0"> -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
     <!-- <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" type="text/css"> -->
     <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css"> -->
-    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.classless.min.css"> -->
     <script src="main.js"></script>
     <style>
         label {
@@ -43,8 +42,19 @@
         </p>
         <button id="end-quiz">Завершить тест для всех 😇</button>
         <br>
-        <button id="check-questions">Проверить вопросы 🧐</button>
-    </main>
+        <form>
+            <button formaction="/check_questions">Проверить вопросы 🧐</button>
+        </form>
+        
+        <p>
+            <button onclick="window.location.href='settings.html'">⚙️ Настройки теста</button>
+        </p>
+		<p>
+            <button onclick = "window.location.href = 'monitor.html'">Монитор</button>
+        </p>
+        
+</main>
+
 
     <hr>
     <footer>

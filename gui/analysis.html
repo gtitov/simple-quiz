@@ -1,0 +1,48 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Анализ результатов</title>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script defer src="analysis.js"></script>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f8f9fa;
+      margin: 2rem;
+    }
+    h1 {
+      margin-bottom: 1rem;
+    }
+    .info {
+      margin: 1rem 0;
+    }
+    .dashboard {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 2rem;
+    }
+    .chart-box {
+      background: white;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+  </style>
+</head>
+<body>
+  <h1>Анализ результатов</h1>
+  <div class="info">
+    <input type="file" id="fileInput" multiple />
+    <span id="fileCount">Число файлов: 0</span><br/>
+    <span id="processedCount">Обработано файлов: 0</span>
+  </div>
+  <div class="dashboard">
+    <div id="chart1" class="chart-box"></div>
+    <div id="chart2" class="chart-box"></div>
+    <div id="chart3" class="chart-box"></div>
+  </div>
+</body>
+</html>
