@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Редактор вопросов</title><link rel="stylesheet" href="teacher.css?v=20260608-1"><script defer src="questions.js?v=20260608-1"></script>
+</head>
+<body>
+  <header><div><h1>Редактор вопросов</h1><p class="stat" id="count"></p></div><nav><a href="teacher.html">Страница преподавателя</a> · <a href="settings.html">Настройки</a> · <a href="results.html">Неправильные ответы</a></nav></header>
+  <main>
+    <div class="toolbar"><label>Поиск <input id="search" placeholder="Текст вопроса, тема или автор"></label><button id="new-question">Добавить вопрос</button></div>
+    <div class="grid">
+      <section class="card"><div class="list" id="question-list"><div class="empty">Загрузка вопросов...</div></div></section>
+      <section class="card">
+        <h2 id="form-title">Новый вопрос</h2>
+        <form id="question-form"><div class="form-grid">
+          <label class="wide">Текст вопроса<textarea id="question" required></textarea></label>
+          <label>Тема<input id="topic" list="topics"></label><label>Автор<input id="author"></label>
+          <label class="wide enabled-control"><input id="enabled" type="checkbox" checked> Вопрос включён и участвует в тестировании</label>
+          <label class="wide">Ссылка на изображение<input id="picture" placeholder="pictures/example.png"></label>
+          <label class="wide">Тип ответа<select id="answer-type"><option value="text">Текстовый ответ</option><option value="single">Один вариант</option><option value="multiple">Несколько вариантов</option></select></label>
+          <label class="wide" id="text-answer-wrap">Правильный ответ<input id="text-answer"></label>
+          <div class="wide" id="options-wrap" hidden><strong>Варианты ответа</strong><div id="options"></div><button type="button" class="secondary" id="add-option">Добавить вариант</button></div>
+        </div><p id="message" class="message"></p><div class="actions"><button type="submit">Сохранить</button><button type="button" class="danger" id="delete-question" hidden>Удалить</button></div></form>
+      </section>
+    </div>
+    <datalist id="topics"></datalist>
+  </main>
+</body>
+</html>

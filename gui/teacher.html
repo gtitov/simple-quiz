@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Страница преподавателя</title>
+  <link rel="stylesheet" href="teacher.css?v=20260607-2">
+  <script defer src="teacher.js?v=20260607-2"></script>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>Страница преподавателя</h1>
+      <p class="stat">Управление тестированием и разбор результатов</p>
+    </div>
+    <nav><a href="index.html">К тестированию</a></nav>
+  </header>
+  <main>
+    <div id="access-message" class="message">Проверка доступа...</div>
+    <section id="teacher-tools" class="tools-grid" hidden>
+      <a class="tool-card" href="settings.html"><h2>Настройки теста</h2><p>Количество вопросов, время, темы и список студентов.</p></a>
+      <a class="tool-card" href="monitor.html"><h2>Монитор</h2><p>Текущий список завершённых работ и результаты студентов.</p></a>
+      <a class="tool-card" href="questions.html"><h2>Редактор вопросов</h2><p>Добавление, поиск, изменение и удаление вопросов.</p></a>
+      <a class="tool-card" href="results.html"><h2>Неправильные ответы</h2><p>Разбор ошибок студентов с фильтрами по имени и теме.</p></a>
+      <a class="tool-card" href="analytics.html"><h2>Аналитика</h2><p>Средний балл, распределение результатов, сложные вопросы и темы.</p></a>
+    </section>
+    <section id="teacher-actions" class="card" hidden>
+      <h2>Управление тестированием</h2>
+      <button id="end-quiz" class="danger">Завершить тест для всех</button>
+    </section>
+  </main>
+</body>
+</html>

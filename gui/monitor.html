@@ -1,124 +1,23 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <title>Мониторинг студентов</title>
-  <style>
-    body { font-family: sans-serif; margin: 2rem; }
-    h2 { margin-top: 3rem; }
-    table { border-collapse: collapse; width: 100%; margin-bottom: 2rem; }
-    th, td { border: 1px solid #aaa; padding: 0.5rem; text-align: left; }
-    th { background-color: #eee; }
-    .success { color: green; }
-    .fail { color: red; }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Монитор тестирования</title>
+  <link rel="stylesheet" href="teacher.css?v=20260616-1">
+  <script defer src="monitor.js?v=20260616-1"></script>
 </head>
-<body onload = "getData()">
-  <h1>Прогресс студентов</h1>
-
-  <h2>✅ Завершённые тесты</h2>
-  <table id="results-table">
-    <thead>
-      <tr>
-        <th>Студент</th>
-        <th>Правильных (%)</th>
-        <th>Начало</th>
-        <th>Окончание</th>
-      </tr>
-    </thead>
-    <tbody id="results-rows">
-      <tr><td colspan="4">Загрузка...</td></tr>
-    </tbody>
-  </table>
-
-  <!-- <h2>🕐 Текущий прогресс</h2> -->
-  <!-- <table id="progress-table"> -->
-    <!-- <thead> -->
-      <!-- <tr> -->
-        <!-- <th>Студент</th> -->
-        <!-- <th>Ответов</th> -->
-        <!-- <th>Всего</th> -->
-        <!-- <th>Начало</th> -->
-      <!-- </tr> -->
-    <!-- </thead> -->
-    <!-- <tbody> -->
-      <!-- <tr><td colspan="4">Загрузка...</td></tr> -->
-    <!-- </tbody> -->
-  <!-- </table> -->
-  
-  <script>
-	function getData() {
-		var xmlhttp = new XMLHttpRequest();
-		xmlhttp.onreadystatechange = function() {
-			if (this.readyState == 4 && this.status == 200  && this.responseText != "") {
-				// document.getElementById("results-rows").innerHTML = "<tr><td>" + this.responseText.slice(0, -2).replace(/,/g, "</td><td>").replace(/\n/g, "</td></tr><tr><td>");
-				const risp = this.responseText.slice(0, -2).split("\n");
-				document.getElementById("results-rows").innerHTML = "";
-				for (var i = 0; i < risp.length; i++) {
-					const row = risp[i].split(",");
-					row[2] = row[2].slice(8, 10) + "." + row[2].slice(5, 7) + "." + row[2].slice(0, 4) + " " + row[2].slice(11, 19).replace(/-/g, ":");
-					var text1 = "";
-					text1 = "<tr><td>" + row[0] + "</td>";
-					text1 += "<td>" + row[1] + "</td><td></td>";
-					text1 += "<td>" + row[2] + "</td></tr>";
-					document.getElementById("results-rows").innerHTML += text1;
-				}
-			}
-		};
-		xmlhttp.open("GET", "summary.txt", true);
-		xmlhttp.send();
-	}
-	setInterval(getData, 5000);
-  </script>
-
-  <script>
-    // async function fetchAll() {
-      // await fetch('/current_results')
-        // .then(r => r.json())
-        // .then(data => {
-          // const tbody = document.querySelector("#results-table tbody");
-          // tbody.innerHTML = "";
-          // if (data.length === 0) {
-            // tbody.innerHTML = "<tr><td colspan='4'>Нет завершённых тестов</td></tr>";
-            // return;
-          // }
-          // data.forEach(item => {
-            // const row = document.createElement("tr");
-            // row.innerHTML = `
-              // <td>${item.student}</td>
-              // <td class="${item.correct_percent >= 50 ? 'success' : 'fail'}">${item.correct_percent}</td>
-              // <td>${item.start}</td>
-              // <td>${item.end}</td>
-            // `;
-            // tbody.appendChild(row);
-          // });
-        // });
-
-      // await fetch('/current_progress')
-        // .then(r => r.json())
-        // .then(data => {
-          // const tbody = document.querySelector("#progress-table tbody");
-          // tbody.innerHTML = "";
-          // if (data.length === 0) {
-            // tbody.innerHTML = "<tr><td colspan='4'>Нет активных студентов</td></tr>";
-            // return;
-          // }
-          // data.forEach(item => {
-            // const row = document.createElement("tr");
-            // row.innerHTML = `
-              // <td>${item.student}</td>
-              // <td>${item.answered}</td>
-              // <td>${item.total}</td>
-              // <td>${item.start}</td>
-            // `;
-            // tbody.appendChild(row);
-          // });
-        // });
-    // }
-
-    // fetchAll();
-    // setInterval(fetchAll, 10000);
-  </script>
+<body>
+  <header><div><h1>Монитор тестирования</h1><p class="stat" id="updated"></p></div><nav><a href="teacher.html">Страница преподавателя</a></nav></header>
+  <main>
+    <section class="card">
+      <h2>Сейчас проходят тест <span class="badge" id="active-count">0</span></h2>
+      <div class="table-wrap"><table><thead><tr><th>Студент</th><th>Начало</th><th>Заполнено</th><th>Правильно</th><th>Неправильно</th><th>Осталось</th><th>Связь</th></tr></thead><tbody id="active-rows"><tr><td colspan="7">Загрузка...</td></tr></tbody></table></div>
+    </section>
+    <section class="card monitor-section">
+      <h2>Завершённые тесты</h2>
+      <div class="table-wrap"><table><thead><tr><th>Студент</th><th>Результат</th><th>Оценка</th><th>Окончание</th></tr></thead><tbody id="completed-rows"><tr><td colspan="4">Загрузка...</td></tr></tbody></table></div>
+    </section>
+  </main>
 </body>
 </html>
