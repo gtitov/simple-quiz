@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Монитор тестирования</title>
+  <link rel="stylesheet" href="teacher.css?v=20260616-1">
+  <script defer src="monitor.js?v=20260616-1"></script>
+</head>
+<body>
+  <header><div><h1>Монитор тестирования</h1><p class="stat" id="updated"></p></div><nav><a href="teacher.html">Страница преподавателя</a></nav></header>
+  <main>
+    <section class="card">
+      <h2>Сейчас проходят тест <span class="badge" id="active-count">0</span></h2>
+      <div class="table-wrap"><table><thead><tr><th>Студент</th><th>Начало</th><th>Заполнено</th><th>Правильно</th><th>Неправильно</th><th>Осталось</th><th>Связь</th></tr></thead><tbody id="active-rows"><tr><td colspan="7">Загрузка...</td></tr></tbody></table></div>
+    </section>
+    <section class="card monitor-section">
+      <h2>Завершённые тесты</h2>
+      <div class="table-wrap"><table><thead><tr><th>Студент</th><th>Результат</th><th>Оценка</th><th>Окончание</th></tr></thead><tbody id="completed-rows"><tr><td colspan="4">Загрузка...</td></tr></tbody></table></div>
+    </section>
+  </main>
+</body>
+</html>

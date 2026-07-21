@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Аналитика тестирования</title>
+  <link rel="stylesheet" href="teacher.css?v=20260610-2">
+  <script defer src="analytics.js?v=20260610-3"></script>
+</head>
+<body>
+  <header>
+    <div><h1>Аналитика тестирования</h1><p class="stat">Статистика по всем сохранённым попыткам · <span id="updated">обновление...</span></p></div>
+    <nav><a href="teacher.html">Страница преподавателя</a> · <a href="results.html">Неправильные ответы</a></nav>
+  </header>
+  <main>
+    <div id="message" class="message">Загрузка аналитики...</div>
+    <section id="analytics" hidden>
+      <div class="metrics" id="metrics"></div>
+      <div class="analytics-grid">
+        <section class="card"><h2>Распределение результатов</h2><div id="distribution" class="bar-chart"></div></section>
+        <section class="card"><h2>Самые сложные темы</h2><div id="topics" class="bar-chart"></div></section>
+      </div>
+      <section class="card analytics-section">
+        <h2>Самые сложные вопросы</h2>
+        <div class="table-wrap"><table><thead><tr><th>Вопрос</th><th>Тема</th><th>Ответов</th><th>Правильно</th><th>Ошибок</th></tr></thead><tbody id="questions"></tbody></table></div>
+      </section>
+      <section class="card analytics-section">
+        <h2>Результаты студентов</h2>
+        <div class="table-wrap"><table><thead><tr><th>Студент</th><th>Результат</th><th>Правильно</th><th>Дата</th></tr></thead><tbody id="students"></tbody></table></div>
+      </section>
+    </section>
+  </main>
+</body>
+</html>

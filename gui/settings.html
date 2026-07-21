@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Настройки теста</title>
+    <link rel="stylesheet" href="app.css?v=20260609-1">
+</head>
+<body>
+    <p><a href="teacher.html">Страница преподавателя</a> · <a href="questions.html">Редактор вопросов</a> · <a href="results.html">Неправильные ответы студентов</a></p>
+
+    <script>
+        const password = sessionStorage.getItem("teacherPassword") || "";
+        if (!password) {
+            window.location.replace("index.html");
+        }
+    </script>
+
+    <h1>Настройки теста</h1>
+    <form id="settings-form">
+        <label for="quiz-length">Количество вопросов:</label>
+        <input type="number" id="quiz-length" name="quiz_length" min="1" max="200">
+
+        <label for="test-time">Время теста (мин):</label>
+        <input type="number" id="test-time" name="test_time" min="1" max="300">
+
+        <label for="activity-timeout">Тайм-аут активности студента (сек):</label>
+        <input type="number" id="activity-timeout" name="activity_timeout" min="15" max="3600">
+        <small>Если от студента нет обновлений дольше этого времени, он исчезает из списка активных.</small>
+
+        <h2>Градации оценок</h2>
+        <label for="grade-3">Оценка 3 с процента:</label>
+        <input type="number" id="grade-3" min="0" max="100">
+
+        <label for="grade-4">Оценка 4 с процента:</label>
+        <input type="number" id="grade-4" min="0" max="100">
+
+        <label for="grade-5">Оценка 5 с процента:</label>
+        <input type="number" id="grade-5" min="0" max="100">
+
+        <label>Выберите темы:</label>
+        <div id="topics-container"></div>
+
+        <button type="submit">Сохранить настройки</button>
+    </form>
+
+    <hr>
+
+    <h2>Обновить список студентов</h2>
+    <p>Можно загрузить файл <code>.json</code> или <code>.csv</code>.</p>
+    <p>Поддерживаются форматы CSV:</p>
+    <ul>
+        <li>один столбец с ФИО;</li>
+        <li>столбец <code>name</code>;</li>
+        <li>столбцы <code>id</code> и <code>name</code>.</li>
+    </ul>
+    <p>Если готовите файл в Excel: сохраните его как <b>CSV UTF-8</b>.</p>
+
+    <form id="upload-form">
+        <input type="file" id="students-file" accept=".json,.csv" required>
+        <button type="submit">Загрузить файл</button>
+    </form>
+
+    <p><a href="index.html">Назад к тестированию</a></p>
+
+    <script>
+        let savedConfig = {};
+
+        fetch("/get_config?password=" + encodeURIComponent(password))
+            .then(r => r.json())
+            .then(cfg => {
+                if (cfg.error) {
+                    sessionStorage.removeItem("teacherPassword");
+                    window.location.replace("index.html");
+                    throw new Error("Доступ запрещён");
+                }
+                savedConfig = cfg;
+                document.getElementById("quiz-length").value = cfg.quiz_length;
+                document.getElementById("test-time").value = cfg.test_time || 15;
+                document.getElementById("activity-timeout").value = cfg.activity_timeout || 30;
+                const gradeThresholds = cfg.grade_thresholds || {"3": 52, "4": 68, "5": 84};
+                document.getElementById("grade-3").value = gradeThresholds["3"];
+                document.getElementById("grade-4").value = gradeThresholds["4"];
+                document.getElementById("grade-5").value = gradeThresholds["5"];
+
+                return fetch("/get_topics?password=" + encodeURIComponent(password));
+            })
+            .then(r => r.json())
+            .then(topics => {
+                const container = document.getElementById("topics-container");
+                topics.forEach(topic => {
+                    const id = `topic-${Math.random().toString(36).substr(2, 9)}`;
+                    const label = document.createElement("label");
+                    const checkbox = document.createElement("input");
+                    checkbox.type = "checkbox";
+                    checkbox.name = "topics";
+                    checkbox.value = topic;
+                    checkbox.id = id;
+
+                    if (savedConfig.topics == null || savedConfig.topics.includes(topic)) {
+                        checkbox.checked = true;
+                    }
+
+                    label.htmlFor = id;
+                    label.textContent = topic || "(без темы)";
+                    const line = document.createElement("div");
+                    line.appendChild(checkbox);
+                    line.appendChild(label);
+                    container.appendChild(line);
+                });
+            });
+
+        document.getElementById("settings-form").addEventListener("submit", function(e) {
+            e.preventDefault();
+            const quiz_length = document.getElementById("quiz-length").value;
+            const checked = Array.from(document.querySelectorAll("input[name='topics']:checked"));
+            const topics = checked.map(c => c.value);
+            const test_time = document.getElementById("test-time").value;
+            const activity_timeout = document.getElementById("activity-timeout").value;
+            const grade_thresholds = {
+                "3": document.getElementById("grade-3").value,
+                "4": document.getElementById("grade-4").value,
+                "5": document.getElementById("grade-5").value
+            };
+
+            fetch("/set_config?password=" + encodeURIComponent(password), {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ quiz_length, topics, test_time, activity_timeout, grade_thresholds })
+            })
+            .then(r => r.text())
+            .then(alert);
+        });
+
+        document.getElementById("upload-form").addEventListener("submit", function(e) {
+            e.preventDefault();
+            const fileInput = document.getElementById("students-file");
+
+            if (!fileInput.files.length) {
+                alert("Выберите файл.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("file", fileInput.files[0]);
+
+            fetch("/upload_students?password=" + encodeURIComponent(password), {
+                method: "POST",
+                body: formData
+            })
+            .then(r => r.text())
+            .then(alert);
+        });
+    </script>
+</body>
+</html>

@@ -1,56 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-
+<!doctype html>
+<html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-    <!-- <link rel="stylesheet" href="https://unpkg.com/awsm.css/dist/awsm.min.css"> -->
-    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/spcss@0.9.0"> -->
-    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css"> -->
-    <!-- <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" type="text/css"> -->
-    <!-- <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css"> -->
-    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.classless.min.css"> -->
-    <script src="main.js"></script>
-    <style>
-        label {
-            margin-right: 10px
-                /*  interval after answer option  */
-        }
-
-        footer {
-            text-align: center;
-        }
-    </style>
-    <title>Тестирование</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="app.css?v=20260609-1">
+  <script src="main.js?v=20260621-2"></script>
+  <title>Тестирование</title>
 </head>
-
 <body>
-    <header id="header">
-        <h1>Тестирование</h1>
-        <p id="host-ip">Тест работает по адресу</p>
-        <p>Получите тест</p>
-    </header>
-
-    <main id="main">
-        <p>Найдите себя и нажмите получить тест:</p>
-        <p>
-            <select id="students-selector">
-                <option value="" disabled selected>ФИО</option>
-            </select>
-            <button id="get-quiz" disabled>Получить тест</button>
-        </p>
-        <button id="end-quiz">Завершить тест для всех 😇</button>
-        <br>
-        <button id="check-questions">Проверить вопросы 🧐</button>
-    </main>
-
-    <hr>
-    <footer>
-        <kbd>кафедра картографии и геоинформатики c 💖 для 👩‍🎓</kbd>
-    </footer>
-
+  <header id="header">
+    <h1>Тестирование</h1>
+    <p id="host-ip">Тест работает по адресу</p>
+    <p>Получите тест</p>
+  </header>
+  <main id="main">
+    <p>Найдите себя и нажмите «Получить тест»:</p>
+    <p>
+      <select id="students-selector">
+        <option value="" disabled selected>ФИО</option>
+      </select>
+      <button id="get-quiz" disabled>Получить тест</button>
+    </p>
+    <p><button id="teacher-page">Страница преподавателя</button></p>
+  </main>
+  <dialog id="teacher-login">
+    <form id="teacher-login-form">
+      <h2>Вход для преподавателя</h2>
+      <label for="teacher-password">Пароль</label>
+      <input id="teacher-password" type="password" autocomplete="current-password" required>
+      <p id="teacher-login-error" class="error"></p>
+      <div class="dialog-actions">
+        <button type="submit">Войти</button>
+        <button type="button" id="teacher-login-cancel">Отмена</button>
+      </div>
+    </form>
+  </dialog>
+  <hr>
+  <footer><kbd>кафедра картографии и геоинформатики с 💖 для 👩‍🎓</kbd></footer>
 </body>
-
 </html>
